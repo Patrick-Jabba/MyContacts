@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 
 import isEmailValid from '../../utils/isEmailValid';
 import formatPhone from '../../utils/formatPhone';
-import useErrors from '../../hooks/useErrors';
 import delay from '../../utils/delay';
+
+import useErrors from '../../hooks/useErrors';
+
 import services from '../../services';
 
-import { ButtonContainer, Form } from './styles';
+import { ButtonContainer } from './styles';
 
 import FormGroup from '../FormGroup';
 // Componentes via children
@@ -15,8 +17,6 @@ import Input from '../Input';
 import Select from '../Select';
 import Button from '../Button';
 
-// Controlled components
-// Uncontrolled components
 export default function ContactForm({ buttonLabel, onSubmit }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -81,7 +81,7 @@ export default function ContactForm({ buttonLabel, onSubmit }) {
   }
 
   return (
-    <Form noValidate onSubmit={handleSubmit}>
+    <form noValidate onSubmit={handleSubmit}>
       <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
           type="text"
@@ -91,6 +91,7 @@ export default function ContactForm({ buttonLabel, onSubmit }) {
           onChange={handleNameChange}
         />
       </FormGroup>
+
       <FormGroup error={getErrorMessageByFieldName('email')}>
         <Input
           type="email"
@@ -100,6 +101,7 @@ export default function ContactForm({ buttonLabel, onSubmit }) {
           placeholder="E-mail"
         />
       </FormGroup>
+
       <FormGroup>
         <Input
           placeholder="Telefone"
@@ -130,7 +132,7 @@ export default function ContactForm({ buttonLabel, onSubmit }) {
           {buttonLabel}
         </Button>
       </ButtonContainer>
-    </Form>
+    </form>
   );
 }
 
