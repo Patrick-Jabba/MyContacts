@@ -1,13 +1,18 @@
-import React, { useEffect, useState, useMemo } from 'react';
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable no-nested-ternary */
+import React, {
+  useEffect, useState, useMemo, useCallback,
+} from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Card, Container, Header, InputSearchContainer, ListHeader, ErrorContainer,
+  Card, Container, Header, InputSearchContainer, ListHeader, ErrorContainer, EmptyListContainer,
 } from './styles';
 
-import arrow from '../../assets/images/icons/arrow.svg';
-import edit from '../../assets/images/icons/edit.svg';
-import trash from '../../assets/images/icons/trash.svg';
 import sad from '../../assets/images/sad.svg';
+import edit from '../../assets/images/icons/edit.svg';
+import arrow from '../../assets/images/icons/arrow.svg';
+import trash from '../../assets/images/icons/trash.svg';
+import emptyBox from '../../assets/images/empty-box.svg';
 
 import Button from '../../components/Button';
 import Loader from '../../components/Loader';
@@ -27,7 +32,7 @@ export default function Home() {
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [contacts, searchTerm]);
 
-  async function loadContacts() {
+  const loadContacts = useCallback(async () => {
     try {
       setIsLoading(true);
       await delay(2500);
@@ -40,11 +45,11 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [orderBy]);
 
   useEffect(() => {
     loadContacts();
-  }, [orderBy]);
+  }, [loadContacts]);
 
   function handleToggleOrderBy() {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
@@ -62,6 +67,7 @@ export default function Home() {
     <Container>
       <Loader isLoading={isLoading} />
 
+      {contacts.length > 0 && (
       <InputSearchContainer>
         <input
           value={searchTerm}
@@ -70,10 +76,20 @@ export default function Home() {
           onChange={handleChangeSearchTerm}
         />
       </InputSearchContainer>
+      )}
 
-      <Header hasError={hasError}>
-        {!hasError && (
-
+      <Header
+        justifyContent={
+          hasError
+            ? 'flex-end'
+            : (
+              contacts.length > 0
+                ? 'space-between'
+                : 'center'
+            )
+        }
+      >
+        {(!hasError && contacts.length > 0) && (
           <strong>
             {filteredContacts.length}
             {filteredContacts.length === 1 ? ' contato' : ' contatos'}
@@ -96,6 +112,17 @@ export default function Home() {
 
       {!hasError && (
         <>
+          {contacts.length < 1 && !isLoading && (
+            <EmptyListContainer>
+              <img src={emptyBox} alt="Empty box" />
+
+              <p>
+                Você ainda não tem nenhum contato cadastrado!
+                Clique no botão <strong>”Novo contato”</strong> à cima
+                para cadastrar o seu primeiro!
+              </p>
+            </EmptyListContainer>
+          )}
           {filteredContacts.length > 0 && (
             <ListHeader orderBy={orderBy}>
               <button type="button" onClick={handleToggleOrderBy}>
