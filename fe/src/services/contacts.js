@@ -12,8 +12,15 @@ export default (httpClient) => ({
 
     throw new APIError(response);
   },
-  createContact: async (contact) => {
-    const response = await httpClient.post('contacts', contact);
+  createContact: async ({
+    name, email, phone, categoryId,
+  }) => {
+    const response = await httpClient.post('/contacts', {
+      name,
+      email,
+      phone,
+      category_id: categoryId,
+    });
 
     return {
       data: response.data,

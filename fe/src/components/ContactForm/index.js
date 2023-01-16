@@ -41,7 +41,7 @@ export default function ContactForm({ buttonLabel, onSubmit }) {
         const { data } = await services.categories.listCategories();
 
         setCategories(data);
-      } catch { } finally {
+      } catch {} finally {
         setIsLoadingCategories(false);
       }
     }
