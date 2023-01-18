@@ -12,6 +12,13 @@ export default (httpClient) => ({
 
     throw new APIError(response);
   },
+  getContactById: async (id) => {
+    const response = await httpClient.get(`/contacts/${id}`);
+
+    return {
+      data: response.data,
+    };
+  },
   createContact: async ({
     name, email, phone, categoryId,
   }) => {
@@ -21,6 +28,13 @@ export default (httpClient) => ({
       phone,
       category_id: categoryId,
     });
+
+    return {
+      data: response.data,
+    };
+  },
+  editContact: async (id, contact) => {
+    const response = await httpClient.put(`/contacts/${id}`, contact);
 
     return {
       data: response.data,
