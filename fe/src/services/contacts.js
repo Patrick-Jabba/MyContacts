@@ -33,11 +33,14 @@ export default (httpClient) => ({
       data: response.data,
     };
   },
-  editContact: async (id, contact) => {
-    const response = await httpClient.put(`/contacts/${id}`, contact);
+  editContact: async (contact) => {
+    const response = await httpClient.put(`/contacts/${contact.id}`, contact);
 
     return {
       data: response.data,
     };
+  },
+  removeContact: async (id) => {
+    await httpClient.delete(`/contacts/${id}`);
   },
 });

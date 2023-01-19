@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import services from '../../services';
@@ -8,10 +8,12 @@ import toast from '../../utils/toast';
 import PageHeader from '../../components/PageHeader';
 import Loader from '../../components/Loader';
 import ContactForm from '../../components/ContactForm';
+import formatPhone from '../../utils/formatPhone';
 
 export default function EditContact() {
+  const contactFormRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [contact, setContact] = useState({});
+  const [contactName, setContactName] = useState('');
 
   const { id } = useParams();
   const history = useHistory();
@@ -23,7 +25,8 @@ export default function EditContact() {
         setIsLoading(true);
         const { data } = await services.contacts.getContactById(id);
 
-        setContact(data);
+        contactFormRef.current.setFieldsValue(data);
+        setContactName(data.name);
         setIsLoading(false);
       } catch {
         history.push('/');
@@ -41,14 +44,15 @@ export default function EditContact() {
   async function handleSubmit(formData) {
     try {
       await delay(2500);
-      const editableContact = {
+      const contact = {
         id,
         name: formData.name,
         email: formData.email,
-        phone: formData.phone,
+        phone: formatPhone(formData.phone),
         category_id: formData.categoryId,
       };
-      await services.contacts.editContact(id, editableContact);
+      const contactData = await services.contacts.editContact(contact);
+      setContactName(contactData.name);
       toast({
         type: 'success',
         text: 'Contato atualizado com sucesso!',
@@ -57,7 +61,7 @@ export default function EditContact() {
     } catch (error) {
       toast({
         type: 'danger',
-        text: `${error.response.data.error}`,
+        text: 'Ocorreu um erro ao editar o contato',
         duration: 3000,
       });
     }
@@ -67,13 +71,12 @@ export default function EditContact() {
     <>
       <Loader isLoading={isLoading} />
       <PageHeader
-        title="Editar Patrick Monteiro"
+        title={isLoading ? 'Carregando...' : `Editar ${contactName}`}
       />
       <ContactForm
-        key={contact.id}
-        contact={contact}
-        onSubmit={handleSubmit}
+        ref={contactFormRef}
         buttonLabel="Salvar alterações"
+        onSubmit={handleSubmit}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef } from 'react';
 
 import delay from '../../utils/delay';
 
@@ -9,6 +9,8 @@ import ContactForm from '../../components/ContactForm';
 import toast from '../../utils/toast';
 
 export default function NewContact() {
+  const contactFormRef = useRef(null);
+
   async function handleSubmit(formData) {
     try {
       await delay(2000);
@@ -20,14 +22,15 @@ export default function NewContact() {
       };
       await services.contacts.createContact(contact);
 
+      contactFormRef.current.resetFields();
       toast({
         type: 'success',
         text: 'Contato cadastrado com sucesso!',
       });
-    } catch {
+    } catch (error) {
       toast({
         type: 'danger',
-        text: 'Ocorreu um erro ao cadastrar o contato!',
+        text: `${error.response.data.error}`,
       });
     }
   }
@@ -37,6 +40,7 @@ export default function NewContact() {
         title="Novo Contato"
       />
       <ContactForm
+        ref={contactFormRef}
         buttonLabel="Cadastrar"
         onSubmit={handleSubmit}
       />
