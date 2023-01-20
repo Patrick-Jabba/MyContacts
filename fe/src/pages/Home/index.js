@@ -134,15 +134,7 @@ export default function Home() {
       )}
 
       <Header
-        justifyContent={
-          hasError
-            ? 'flex-end'
-            : (
-              contacts.length > 0
-                ? 'space-between'
-                : 'center'
-            )
-        }
+        justifyContent="space-between"
       >
         {(!hasError && contacts.length > 0) && (
           <strong>
@@ -151,6 +143,7 @@ export default function Home() {
           </strong>
         )}
         <Link to="/new">Novo Contato</Link>
+        <Link to="/newCategory">Nova Categoria</Link>
       </Header>
 
       {hasError && (
@@ -203,8 +196,8 @@ export default function Home() {
               <div className="info">
                 <div className="contact-name">
                   <strong>{contact.name}</strong>
-                  {contact.category_name && (
-                    <small>{contact.category_name}</small>
+                  {contact.category.name && (
+                    <small>{contact.category.name}</small>
                   )}
                 </div>
                 <span>{contact.email}</span>

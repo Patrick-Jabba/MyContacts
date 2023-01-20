@@ -6,20 +6,20 @@ import toast from '../../utils/toast';
 import services from '../../services';
 
 import PageHeader from '../../components/PageHeader';
-import ContactForm from '../../components/ContactForm';
+import CategoryForm from '../../components/CategoryForm';
 
-export default function NewContact() {
-  const contactFormRef = useRef(null);
+export default function NewCategory() {
+  const categoryFormRef = useRef(null);
 
-  async function handleSubmit(contact) {
+  async function handleSubmit(category) {
     try {
       await delay(2000);
-      await services.contacts.createContact(contact);
+      await services.categories.createCategory(category);
 
-      contactFormRef.current.resetFields();
+      categoryFormRef.current.resetFields();
       toast({
         type: 'success',
-        text: 'Contato cadastrado com sucesso!',
+        text: 'Categoria cadastrada com sucesso!',
       });
     } catch (error) {
       toast({
@@ -31,10 +31,10 @@ export default function NewContact() {
   return (
     <>
       <PageHeader
-        title="Novo Contato"
+        title="Nova Categoria"
       />
-      <ContactForm
-        ref={contactFormRef}
+      <CategoryForm
+        ref={categoryFormRef}
         buttonLabel="Cadastrar"
         onSubmit={handleSubmit}
       />

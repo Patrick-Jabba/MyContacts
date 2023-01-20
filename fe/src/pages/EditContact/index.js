@@ -9,7 +9,6 @@ import useIsMounted from '../../hooks/useIsMounted';
 
 import Loader from '../../components/Loader';
 import PageHeader from '../../components/PageHeader';
-import formatPhone from '../../utils/formatPhone';
 import ContactForm from '../../components/ContactForm';
 
 export default function EditContact() {
@@ -49,17 +48,10 @@ export default function EditContact() {
     loadContact();
   }, [id, history, isMounted]);
 
-  async function handleSubmit(formData) {
+  async function handleSubmit(contact) {
     try {
       await delay(2500);
-      const contact = {
-        id,
-        name: formData.name,
-        email: formData.email,
-        phone: formatPhone(formData.phone),
-        category_id: formData.categoryId,
-      };
-      const { data } = await services.contacts.editContact(contact);
+      const { data } = await services.contacts.editContact(id, contact);
 
       setContactName(data.name);
       toast({
