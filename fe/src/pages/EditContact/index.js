@@ -5,15 +5,19 @@ import services from '../../services';
 import delay from '../../utils/delay';
 import toast from '../../utils/toast';
 
-import PageHeader from '../../components/PageHeader';
+import useIsMounted from '../../hooks/useIsMounted';
+
 import Loader from '../../components/Loader';
-import ContactForm from '../../components/ContactForm';
+import PageHeader from '../../components/PageHeader';
 import formatPhone from '../../utils/formatPhone';
+import ContactForm from '../../components/ContactForm';
 
 export default function EditContact() {
   const contactFormRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [contactName, setContactName] = useState('');
+
+  const isMounted = useIsMounted();
 
   const { id } = useParams();
   const history = useHistory();
@@ -25,21 +29,25 @@ export default function EditContact() {
         setIsLoading(true);
         const { data } = await services.contacts.getContactById(id);
 
-        contactFormRef.current.setFieldsValue(data);
-        setContactName(data.name);
-        setIsLoading(false);
+        if (isMounted()) {
+          contactFormRef.current.setFieldsValue(data);
+          setIsLoading(false);
+          setContactName(data.name);
+        }
       } catch {
-        history.push('/');
-        toast({
-          type: 'danger',
-          text: 'Contato não encontrado!',
-          duration: 3000,
-        });
+        if (isMounted()) {
+          history.push('/');
+          toast({
+            type: 'danger',
+            text: 'Contato não encontrado!',
+            duration: 3000,
+          });
+        }
       }
     }
 
     loadContact();
-  }, [id, history]);
+  }, [id, history, isMounted]);
 
   async function handleSubmit(formData) {
     try {
@@ -51,8 +59,9 @@ export default function EditContact() {
         phone: formatPhone(formData.phone),
         category_id: formData.categoryId,
       };
-      const contactData = await services.contacts.editContact(contact);
-      setContactName(contactData.name);
+      const { data } = await services.contacts.editContact(contact);
+
+      setContactName(data.name);
       toast({
         type: 'success',
         text: 'Contato atualizado com sucesso!',
