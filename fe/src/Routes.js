@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Home from './pages/Home';
 import NewContact from './pages/NewContact';
 import NewCategory from './pages/NewCategory';
-import EditContact from './pages/EditContact';
+import { Container as EditContact } from './pages/EditContact';
 
 export default function Routes() {
   return (

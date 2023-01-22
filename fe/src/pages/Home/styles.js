@@ -44,7 +44,6 @@ export const Header = styled.header`
     padding: 8px 16px;
     border-radius: 4px;
     transition: all 0.2s ease-in;
-    margin-right: 4px;
 
     &:hover{
       background: ${({ theme }) => theme.colors.primary.main};

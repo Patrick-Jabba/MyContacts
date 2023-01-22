@@ -134,7 +134,15 @@ export default function Home() {
       )}
 
       <Header
-        justifyContent="space-between"
+        justifyContent={
+          hasError
+            ? 'flex-end'
+            : (
+              contacts.length > 0
+                ? 'space-between'
+                : 'center'
+            )
+        }
       >
         {(!hasError && contacts.length > 0) && (
           <strong>
@@ -143,7 +151,6 @@ export default function Home() {
           </strong>
         )}
         <Link to="/new">Novo Contato</Link>
-        <Link to="/newCategory">Nova Categoria</Link>
       </Header>
 
       {hasError && (
@@ -206,13 +213,13 @@ export default function Home() {
 
               <div className="actions">
                 <Link to={`/edit/${contact.id}`}>
-                  <img src={edit} alt="Edit" />
+                  <img src={edit} alt="Edit" title="Editar Contato" />
                 </Link>
                 <button
                   type="button"
                   onClick={() => handleDeleteContact(contact)}
                 >
-                  <img src={trash} alt="Delete" />
+                  <img src={trash} alt="Delete" title="Remover Contato" />
                 </button>
               </div>
             </Card>
