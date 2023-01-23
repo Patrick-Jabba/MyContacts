@@ -7,9 +7,7 @@ import toast from '../../utils/toast';
 
 import useIsMounted from '../../hooks/useIsMounted';
 
-import Presentation from './Presentation';
-
-export default function Container() {
+export default function useEditContact() {
   const contactFormRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [contactName, setContactName] = useState('');
@@ -66,12 +64,10 @@ export default function Container() {
     }
   }
 
-  return (
-    <Presentation
-      isLoading={isLoading}
-      contactFormRef={contactFormRef}
-      contactName={contactName}
-      onSubmit={handleSubmit}
-    />
-  );
+  return {
+    isLoading,
+    contactFormRef,
+    contactName,
+    handleSubmit,
+  };
 }
