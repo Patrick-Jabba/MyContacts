@@ -27,7 +27,7 @@ export default function Home() {
   const loadContacts = useCallback(async () => {
     try {
       setIsLoading(true);
-      await delay(2500);
+      await delay(2000);
       const { data } = await services.contacts.listContacts(orderBy);
 
       setContacts(data);
@@ -68,12 +68,12 @@ export default function Home() {
   async function handleConfirmDeleteContact() {
     try {
       setIsLoadingDelete(true);
-      await delay(2500);
+      await delay(2000);
       services.contacts.removeContact(contactBeingDeleted.id);
       toast({
         type: 'success',
         text: `Contato ${contactBeingDeleted.name} removido com sucesso!`,
-        duration: 2500,
+        duration: 2000,
       });
       handleCloseDeleteModal();
       setContacts((prevState) => prevState.filter(

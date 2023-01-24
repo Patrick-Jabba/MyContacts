@@ -30,6 +30,6 @@ export default function Header({ hasError, qtyOfContacts, qtyOfFilteredContacts 
 
 Header.propTypes = {
   hasError: PropTypes.bool.isRequired,
-  qtyOfContacts: PropTypes.number.isRequired,
-  qtyOfFilteredContacts: PropTypes.number.isRequired,
+  qtyOfContacts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  qtyOfFilteredContacts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
